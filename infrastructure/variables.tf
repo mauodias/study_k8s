@@ -5,5 +5,5 @@ variable "control_nodes" {
 
 variable "worker_nodes" {
   type = number
-  default = 2
+  default = 3
 }
