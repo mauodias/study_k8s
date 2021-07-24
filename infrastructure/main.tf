@@ -1,5 +1,6 @@
 resource "google_compute_instance" "controlnode" {
-  name         = "controlnode"
+  count = var.control_nodes
+  name         = "controlnode-${count.index}"
   machine_type = "e2-small"
   zone         = "europe-west4-a"
 
