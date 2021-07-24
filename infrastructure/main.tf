@@ -8,4 +8,10 @@ resource "google_compute_instance" "controlnode" {
       image = "debian-cloud/debian-9"
     }
   }
+
+  network_interface {
+    network = "default"
+
+    access_config {}
+  }
 }
