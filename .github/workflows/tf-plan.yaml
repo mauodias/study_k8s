@@ -1,0 +1,40 @@
+name: "Terraform Plan"
+
+on:
+  pull_request:
+
+defaults:
+  run:
+    working-directory: infrastructure
+
+jobs:
+  terraform-plan:
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2.1.0
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v1.0.1
+
+      - name: "Terraform Init"
+        run: terraform init -input=false
+
+      - name: "Terraform Plan"
+        id: plan
+        run: terraform plan -input=false -no-color
+
+      - name: "Comment with output of Terraform Plan"
+        uses: actions/github-script@0.9.0
+        env:
+          STDOUT: "```${{ steps.plan.outputs.stdout }}```"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.STDOUT
+            })
