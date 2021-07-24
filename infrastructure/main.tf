@@ -9,6 +9,7 @@ resource "google_compute_firewall" "k8s_controlnode_rule" {
   allow {
     protocol = "tcp"
     ports = ["6443", "2379-2380", "10250", "10251", "10252"]
+  }
 
   target_tags = ["controlnode"]
 }
@@ -20,6 +21,7 @@ resource "google_compute_firewall" "k8s_workernode_rule" {
   allow {
     protocol = "tcp"
     ports = ["10250", "30000-32767"]
+  }
 
   target_tags = ["workernode"]
 }
@@ -35,6 +37,7 @@ resource "google_compute_firewall" "default" {
   allow {
     protocol = "tcp"
     ports = ["22"]
+  }
 }
 
 resource "google_compute_instance" "controlnode" {
