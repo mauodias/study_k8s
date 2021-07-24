@@ -14,6 +14,7 @@ resource "google_compute_instance" "controlnode" {
 
   network_interface {
     network = "default"
+    access_config {}
   }
 }
 
@@ -33,5 +34,6 @@ resource "google_compute_instance" "workernode" {
 
   network_interface {
     network = "default"
+    access_config {}
   }
 }
