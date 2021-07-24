@@ -21,10 +21,14 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
       - name: "Terraform Init"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: terraform init -input=false
 
       - name: "Terraform Plan"
         id: plan
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: terraform plan -input=false -no-color
 
       - name: "Comment with output of Terraform Plan"
