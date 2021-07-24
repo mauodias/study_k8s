@@ -1,0 +1,33 @@
+name: "Terraform Apply"
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: infrastructure
+
+jobs:
+  terraform-apply:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2.1.0
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v1.0.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+      - name: "Terraform Init"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: terraform init -input=false
+
+      - name: "Terraform Apply"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: terraform apply -input=false -auto-approve
