@@ -50,7 +50,7 @@ resource "google_compute_instance" "controlnode" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.os_image
     }
   }
 
@@ -70,7 +70,7 @@ resource "google_compute_instance" "workernode" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.os_image
     }
   }
 
