@@ -1,3 +1,45 @@
+resource "google_compute_network" "vcp" {
+  name = "k8s-network"
+}
+
+resource "google_compute_firewall" "k8s_controlnode_rule" {
+  name = "k8s-controlnode-rule"
+  network = google_compute_network.vcp.name
+
+  allow {
+    protocol = "tcp"
+    ports = ["6443", "2379-2380", "10250", "10251", "10252"]
+  }
+
+  target_tags = ["controlnode"]
+}
+
+resource "google_compute_firewall" "k8s_workernode_rule" {
+  name = "k8s-workernode-rule"
+  network = google_compute_network.vcp.name
+
+  allow {
+    protocol = "tcp"
+    ports = ["10250", "30000-32767"]
+  }
+
+  target_tags = ["workernode"]
+}
+
+resource "google_compute_firewall" "default" {
+  name = "default"
+  network = google_compute_network.vcp.name
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+}
+
 resource "google_compute_instance" "controlnode" {
   count = var.control_nodes
   name         = "controlnode-${count.index}"
@@ -13,7 +55,7 @@ resource "google_compute_instance" "controlnode" {
   }
 
   network_interface {
-    network = "default"
+    network = google_compute_network.vcp.name
     access_config {}
   }
 }
@@ -33,7 +75,7 @@ resource "google_compute_instance" "workernode" {
   }
 
   network_interface {
-    network = "default"
+    network = google_compute_network.vcp.name
     access_config {}
   }
 }
