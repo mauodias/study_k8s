@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "infrastructure/**"
-  workflow_dispatch
+  workflow_dispatch:
 
 defaults:
   run:
